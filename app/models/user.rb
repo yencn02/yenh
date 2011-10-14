@@ -10,7 +10,8 @@ class User < ActiveRecord::Base
   validates :login, :presence   => true,
                     :uniqueness => true,
                     :length     => { :within => 3..40 },
-                    :format     => { :with => Authentication.login_regex, :message => Authentication.bad_login_message }
+                    :format     => { :with => Authentication.login_regex, :message => Authentication.bad_login_message },
+                    :if         => lambda { |c| c.provider.blank? }
 
   validates :name,  :format     => { :with => Authentication.name_regex, :message => Authentication.bad_name_message },
                     :length     => { :maximum => 100 },
@@ -19,9 +20,11 @@ class User < ActiveRecord::Base
   validates :email, :presence   => true,
                     :uniqueness => true,
                     :format     => { :with => Authentication.email_regex, :message => Authentication.bad_email_message },
-                    :length     => { :within => 6..100 }
+                    :length     => { :within => 6..100 },
+                    :if         => lambda { |c| c.provider.blank? }
 
-  
+  validates :password, :presence   => true, :if         => lambda { |c| c.provider.blank? }
+  validates :password_comfirmation, :presence   => true, :if         => lambda { |c| c.provider.blank? }
 
   # HACK HACK HACK -- how to do attr_accessible from here?
   # prevents a user from submitting a crafted form that bypasses activation
@@ -48,6 +51,31 @@ class User < ActiveRecord::Base
 
   def email=(value)
     write_attribute :email, (value ? value.downcase : nil)
+  end
+
+  def self.create_with_omniauth(auth)
+    user = self.new do |user|
+      user.login = auth["user_info"]["name"]
+      user.provider = auth["provider"]
+      user.uid = auth["uid"]
+      user.name = auth["user_info"]["name"]
+      user.state = "active"
+      user.auth = auth.to_json
+    end
+    user.save(:validate => false)
+    return user
+  end
+
+  def auth
+    begin
+      JSON.parse(self[:auth])
+    rescue
+      self[:auth]
+    end
+  end
+
+  def access_token
+    auth["credentials"]["token"]
   end
 
   protected

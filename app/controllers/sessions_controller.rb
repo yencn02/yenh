@@ -5,22 +5,25 @@ class SessionsController < ApplicationController
   end
 
   def create
-    logout_keeping_session!
-    user = User.authenticate(params[:login], params[:password])
-    if user
-      # Protects against session fixation attacks, causes request forgery
-      # protection if user resubmits an earlier form using back
-      # button. Uncomment if you understand the tradeoffs.
-      # reset_session
+    auth = request.env["omniauth.auth"]
+    if auth
+      user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
       self.current_user = user
-      new_cookie_flag = (params[:remember_me] == "1")
-      handle_remember_cookie! new_cookie_flag
       redirect_back_or_default('/', :notice => "Logged in successfully")
     else
-      note_failed_signin
-      @login       = params[:login]
-      @remember_me = params[:remember_me]
-      render :action => 'new'
+      logout_keeping_session!
+      user = User.authenticate(params[:login], params[:password])
+      if user
+        self.current_user = user
+        new_cookie_flag = (params[:remember_me] == "1")
+        handle_remember_cookie! new_cookie_flag
+        redirect_back_or_default('/', :notice => "Logged in successfully")
+      else
+        note_failed_signin
+        @login       = params[:login]
+        @remember_me = params[:remember_me]
+        render :action => 'new'
+      end
     end
   end
 
@@ -29,6 +32,11 @@ class SessionsController < ApplicationController
     redirect_back_or_default('/', :notice => "You have been logged out.")
   end
 
+  def authfail
+    flash[:notice] = "Authorization Failure!"
+    redirect_back_or_default '/'
+  end
+  
 protected
   # Track failed login attempts
   def note_failed_signin

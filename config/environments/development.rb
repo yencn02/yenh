@@ -37,4 +37,8 @@ Yenh::Application.configure do
     :authentication  => :login
   }
 
+  FACEBOOK_KEY = '288703597826180'
+  FACEBOOK_SECRET = '767b8f71127f247ae4919aff2b8bc8f3'
+  TWITTER_KEY = 'htPe5o3EmPTQdbK5xl2bbQ'
+  TWITTER_SECRET = 'YKNAHkfVVAogytMKKhjPZEdNaTy6m8m3ockkwADKI'
 end

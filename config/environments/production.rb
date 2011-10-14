@@ -57,4 +57,15 @@ Yenh::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+  config.action_mailer.smtp_settings = {
+    :address  => "smtp.gmail.com",
+    :port  => 25,
+    :user_name  => "yencn02@gmail.com",
+    :password  => "xxx",
+    :authentication  => :login
+  }
+  FACEBOOK_KEY = '288703597826180'
+  FACEBOOK_SECRET = '767b8f71127f247ae4919aff2b8bc8f3'
+  TWITTER_KEY = 'htPe5o3EmPTQdbK5xl2bbQ'
+  TWITTER_SECRET = 'YKNAHkfVVAogytMKKhjPZEdNaTy6m8m3ockkwADKI'
 end

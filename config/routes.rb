@@ -69,7 +69,7 @@ Yenh::Application.routes.draw do
   match 'logout' => 'sessions#destroy', :as => :logout
   match 'signup' => 'users#new', :as => :signup
   match 'activate/:activation_code' => 'users#activate', :as => :activate, :activation_code => nil
-
-
+  match "/auth/:provider/callback" => "sessions#create"
+  match '/auth/failure', :to => 'sessions#authfail'
   root :to => 'home#index'
 end
