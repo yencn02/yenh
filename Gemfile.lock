@@ -15,6 +15,11 @@ GEM
       rack-mount (~> 0.8.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.0.0)
+    activemerchant (1.17.0)
+      activesupport (>= 2.3.11)
+      braintree (>= 2.0.0)
+      builder (>= 2.0.0)
+      json (>= 1.5.1)
     activemodel (3.1.0)
       activesupport (= 3.1.0)
       bcrypt-ruby (~> 3.0.0)
@@ -34,6 +39,8 @@ GEM
     ansi (1.3.0)
     arel (2.2.1)
     bcrypt-ruby (3.0.1)
+    braintree (2.11.0)
+      builder (>= 2.0.0)
     builder (3.0.0)
     coffee-rails (3.1.1)
       coffee-script (>= 2.2.0)
@@ -76,6 +83,8 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    money (3.7.1)
+      i18n (~> 0.4)
     multi_json (1.0.3)
     multi_xml (0.2.2)
     multipart-post (1.1.3)
@@ -187,9 +196,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activemerchant
   coffee-rails (~> 3.1.0)
   fbgraph
   jquery-rails
+  money
   mysql2
   omniauth
   rails (= 3.1.0)

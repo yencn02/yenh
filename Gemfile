@@ -8,6 +8,8 @@ gem 'rails', '3.1.0'
 gem 'mysql2'
 gem 'omniauth'
 gem "fbgraph"
+gem "money"
+gem "activemerchant"
 
 # Gems used only for assets and not required
 # in production environments by default.

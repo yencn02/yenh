@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
                     :if         => lambda { |c| c.provider.blank? }
 
   validates :password, :presence   => true, :if         => lambda { |c| c.provider.blank? }
-  validates :password_comfirmation, :presence   => true, :if         => lambda { |c| c.provider.blank? }
+  validates :password_confirmation, :presence   => true, :if         => lambda { |c| c.provider.blank? }
 
   # HACK HACK HACK -- how to do attr_accessible from here?
   # prevents a user from submitting a crafted form that bypasses activation
